@@ -127,9 +127,9 @@ diff -Naur qtwebkit-opensource-src-5.2.1-orig/Source/WebCore/platform/graphics/q
  };
  
  } // namespace WebCore
-diff -Naur qtwebkit-opensource-src-5.2.1-orig/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp qtwebkit-opensource-src-5.2.1/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
---- qtwebkit-opensource-src-5.2.1-orig/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp	2014-02-01 21:37:48.000000000 +0100
-+++ qtwebkit-opensource-src-5.2.1/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp	2014-02-20 15:16:58.113032333 +0100
+diff -ur qt5webkit-5.3.0-beta.orig/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp qt5webkit-5.3.0-beta/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp
+--- qt5webkit-5.3.0-beta.orig/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp	2014-03-23 00:12:24.000000000 +0100
++++ qt5webkit-5.3.0-beta/Source/WebCore/platform/graphics/qt/ImageBufferQt.cpp	2014-04-07 15:02:50.126305119 +0200
 @@ -45,116 +45,315 @@
  #include <QPixmap>
  #include <math.h>
@@ -641,17 +641,23 @@ diff -Naur qtwebkit-opensource-src-5.2.1-orig/Source/WebCore/platform/graphics/q
 +    m_data.m_impl->platformTransformColorSpace(lookUpTable);
  }
  
- static inline void copyColorToRGBA(Color& from, uchar* to)
-@@ -246,7 +535,7 @@
-     const unsigned destBytesPerRow = 4 * rect.width();
+ template <Multiply multiplied>
+@@ -207,11 +496,9 @@
+     if (rect.x() < 0 || rect.y() < 0 || rect.maxX() > size.width() || rect.maxY() > size.height())
+         image.fill(0);
  
-     // NOTE: For unmultiplied data, we undo the premultiplication below.
--    QImage image = imageData.toQImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
-+    QImage image = imageData.m_impl->toQImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
+-    // Let drawPixmap deal with the conversion.
+-    QPainter painter(&image);
+-    painter.setCompositionMode(QPainter::CompositionMode_Source);
+-    painter.drawPixmap(QPoint(0,0), imageData.m_pixmap, rect);
+-    painter.end();
++    // Let drawImage deal with the conversion.
++    imageData.m_painter->setCompositionMode(QPainter::CompositionMode_Source);
++    imageData.m_painter->drawImage(QPoint(0,0), image, rect);
  
-     ASSERT(!image.isNull());
- 
-@@ -330,7 +619,7 @@
+     return result.release();
+ }
+@@ -233,7 +520,7 @@
  
      bool isPainting = m_data.m_painter->isActive();
      if (!isPainting)
@@ -660,7 +666,7 @@ diff -Naur qtwebkit-opensource-src-5.2.1-orig/Source/WebCore/platform/graphics/q
      else {
          m_data.m_painter->save();
  
-@@ -371,11 +660,17 @@
+@@ -278,11 +565,17 @@
      // gif, jpeg..., xpm) so skip the image/ to get the Qt image format used to encode
      // the m_pixmap image.
  
