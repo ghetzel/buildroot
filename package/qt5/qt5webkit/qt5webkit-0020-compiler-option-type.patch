@@ -1,0 +1,25 @@
+--- a/Source/ThirdParty/leveldb/Target.pri
++++ b/Source/ThirdParty/leveldb/Target.pri
+@@ -109,8 +109,8 @@
+ freebsd*: DEFINES += OS_FREEBSD
+ 
+ gcc {
+-    QMAKE_CXXFLAGS_WARN_ON += -Wno-error=unused-but-set-variable
+-    QMAKE_CXXFLAGS += -Wno-error=unused-but-set-variable
++    QMAKE_CXXFLAGS_WARN_ON += -Wno-error-unused-but-set-variable
++    QMAKE_CXXFLAGS += -Wno-error-unused-but-set-variable
+ }
+ 
+ QT += core
+--- a/Source/cmake/WebKitHelpers.cmake
++++ b/Source/cmake/WebKitHelpers.cmake
+@@ -42,7 +42,7 @@
+ 
+         # Enable errors on warning
+         if (OPTION_ENABLE_WERROR)
+-            set(OLD_COMPILE_FLAGS "-Werror -Wno-error=unused-parameter ${OLD_COMPILE_FLAGS}")
++            set(OLD_COMPILE_FLAGS "-Werror -Wno-error-unused-parameter ${OLD_COMPILE_FLAGS}")
+         endif ()
+ 
+         # Disable C++0x compat warnings for GCC >= 4.6.0 until we build
+
