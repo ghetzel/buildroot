@@ -1,0 +1,6 @@
+config BR2_PACKAGE_MLBROWSER
+	bool "mlbrowser"
+	help
+	  Metrological's simple (accelerated) browser implementation
+	  http://www.metrological.com
+
