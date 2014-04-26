@@ -1,0 +1,31 @@
+From 252bbcca056001eb48fb967bb150846124710ca6 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Tue, 1 Apr 2014 22:26:00 -0700
+Subject: [PATCH] Fix compilation: missing typedef for uint32_t
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+status.cc:12:3: error: ‘uint32_t’ was not declared in this scope
+
+Change-Id: Id6ea656937f8db39976603a504bcdd0c7559e488
+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@digia.com>
+---
+ Source/ThirdParty/leveldb/util/status.cc |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/Source/ThirdParty/leveldb/util/status.cc b/Source/ThirdParty/leveldb/util/status.cc
+index a44f35b..bbb3540 100644
+--- a/Source/ThirdParty/leveldb/util/status.cc
++++ b/Source/ThirdParty/leveldb/util/status.cc
+@@ -3,6 +3,7 @@
+ // found in the LICENSE file. See the AUTHORS file for names of contributors.
+ 
+ #include <stdio.h>
++#include <stdint.h>    // C99 header, available as an extension in C++98
+ #include "port/port.h"
+ #include "leveldb/status.h"
+ 
+-- 
+1.7.1
+
